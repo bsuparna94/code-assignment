@@ -1,0 +1,46 @@
+public class OrderCreationController {
+    @AuraEnabled
+    public static List<Product__c> getAvailableProducts() {
+        try {
+            // Retrieve available products from the inventory
+            return [SELECT Id, Name FROM Product__c];
+        } catch (Exception e) {
+            // Log the error and handle it gracefully
+            System.debug('Error in getAvailableProducts: ' + e.getMessage());
+            throw new AuraHandledException('An error occurred while retrieving available products. Please try again.');
+        }
+    }
+    
+    @AuraEnabled
+    public static Boolean createOrderRecord(Id productId, Decimal amount) {
+        try {
+            // Validate inputs
+            if (String.isBlank(productId) || amount == null || amount <= 0) {
+                throw new AuraHandledException('Please provide valid product and amount.');
+            }
+            
+            // Additional security checks (example)
+            if (!isProductAvailable(productId)) {
+                throw new AuraHandledException('The selected product is not available.');
+            }
+            
+            // Create order record in the custom object
+            Order__c order = new Order__c();
+            order.Product__c = productId;
+            order.Amount__c = amount;
+            order.Created_Date__c = Date.today();
+            
+            insert order;
+            return true;
+        } catch (AuraHandledException e) {
+            // Log the error and handle it gracefully
+            System.debug('Error in createOrderRecord: ' + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            // Log the error and handle it gracefully
+            System.debug('Error in createOrderRecord: ' + e.getMessage());
+            throw new AuraHandledException('An error occurred while creating the order. Please try again.');
+        }
+    }
+    
+   

@@ -1,0 +1,19 @@
+@IsTest
+private class OrderTest {
+    
+    @IsTest
+    static void testOrderCreation() {
+        // Create a new Order record
+        Order__c newOrder = new Order__c();
+        newOrder.Amount__c = 100.50;
+        newOrder.Created_Date__c = Date.today();
+        insert newOrder;
+        
+        // Retrieve the Order record from the database
+        Order__c retrievedOrder = [SELECT Id, Amount__c, Created_Date__c FROM Order__c WHERE Id = :newOrder.Id];
+        
+        // Verify that the retrieved Order record matches the created Order record
+        System.assertEquals(newOrder.Amount__c, retrievedOrder.Amount__c);
+        System.assertEquals(newOrder.Created_Date__c, retrievedOrder.Created_Date__c);
+    }
+}

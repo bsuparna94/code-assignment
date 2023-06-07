@@ -1,0 +1,71 @@
+@isTest
+public class ProductTest {
+    
+    @isTest
+    static void testValidSKU() {
+        Product p = new Product();
+        p.sku = '12345678901234567890'; // 20 characters, valid SKU
+        p.name = 'Test Product';
+        p.quantity = 10;
+        p.unit_price = 9.99;
+        
+        System.assert(p.sku.length() <= 20, 'SKU length exceeded 20 characters');
+        insert p;
+        
+        // Additional assertions or verifications as needed
+    }
+    
+    @isTest
+    static void testInvalidSKU() {
+        Product p = new Product();
+        p.sku = '123456789012345678901'; // 21 characters, invalid SKU
+        p.name = 'Test Product';
+        p.quantity = 10;
+        p.unit_price = 9.99;
+        
+        System.assert(p.sku.length() > 20, 'SKU length did not exceed 20 characters');
+        
+        try {
+            insert p;
+            System.assert(false, 'Expected exception for SKU length validation');
+        } catch (DMLException e) {
+            // Verify that the exception was thrown due to SKU length validation
+            System.assert(e.getMessage().containsIgnoreCase('SKU length exceeded 20 characters'),
+                          'Unexpected exception message');
+        }
+    }
+    
+    @isTest
+    static void testValidUnitPrice() {
+        Product p = new Product();
+        p.sku = '12345678901234567890';
+        p.name = 'Test Product';
+        p.quantity = 10;
+        p.unit_price = 99.99; // 5 digits, 2 decimal places
+        
+        System.assert(p.unit_price.scale() <= 2, 'Unit price decimal places exceeded 2');
+        insert p;
+        
+        // Additional assertions or verifications as needed
+    }
+    
+    @isTest
+    static void testInvalidUnitPrice() {
+        Product p = new Product();
+        p.sku = '12345678901234567890';
+        p.name = 'Test Product';
+        p.quantity = 10;
+        p.unit_price = 999.999; // 6 digits, 3 decimal places
+        
+        System.assert(p.unit_price.scale() > 2, 'Unit price decimal places did not exceed 2');
+        
+        try {
+            insert p;
+            System.assert(false, 'Expected exception for unit price decimal places validation');
+        } catch (DMLException e) {
+            // Verify that the exception was thrown due to unit price decimal places validation
+            System.assert(e.getMessage().containsIgnoreCase('Unit price decimal places exceeded 2'),
+                          'Unexpected exception message');
+        }
+    }
+}

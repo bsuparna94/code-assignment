@@ -1,0 +1,34 @@
+({
+    init: function(component, event, helper) {
+        // Retrieve available products from the inventory
+        helper.getProducts(component, function(response) {
+            component.set("v.products", response);
+        });
+    },
+    
+    createOrder: function(component, event, helper) {
+        // Validate inputs
+        var selectedProduct = component.get("v.selectedProduct");
+        var amount = component.get("v.amount");
+        
+        if (!selectedProduct || !amount || isNaN(amount)) {
+            component.set("v.errorMessage", "Please provide valid inputs.");
+            return;
+        }
+        
+        // Create order record
+        helper.createOrder(component, selectedProduct, amount, function(response) {
+            if (response === true) {
+                // Order creation successful
+                // Perform any necessary actions or display success message
+                // Reset input fields
+                component.set("v.selectedProduct", "");
+                component.set("v.amount", null);
+                component.set("v.errorMessage", "");
+            } else {
+                // Order creation failed
+                component.set("v.errorMessage", "Order creation failed. Please try again later.");
+            }
+        });
+    }
+})

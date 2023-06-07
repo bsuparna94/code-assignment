@@ -1,0 +1,35 @@
+({
+    init: function(component, event, helper) {
+        // Load existing products on component initialization
+        helper.loadProducts(component);
+    },
+
+    addProduct: function(component, event, helper) {
+        var newProduct = component.get("v.newProduct");
+        helper.createProduct(component, newProduct);
+        // Reset newProduct attribute to clear the input fields
+        component.set("v.newProduct", {'sobjectType':'Product__c', 'SKU__c':0, 'Name':'', 'Quantity__c':0, 'Unit_Price__c':0});
+    },
+
+    editProduct: function(component, event, helper) {
+        var productId = event.target.dataset.id;
+        helper.getProduct(component, productId);
+    },
+
+    saveProduct: function(component, event, helper) {
+        var editProduct = component.get("v.editProduct");
+        helper.updateProduct(component, editProduct);
+        // Clear the editProduct attribute to hide the edit section
+        component.set("v.editProduct", null);
+    },
+
+    deleteProduct: function(component, event, helper) {
+        var productId = event.target.dataset.id;
+        helper.deleteProduct(component, productId);
+    },
+
+    cancelEdit: function(component, event, helper) {
+        // Clear the editProduct attribute to hide the edit section
+        component.set("v.editProduct", null);
+    }
+})
