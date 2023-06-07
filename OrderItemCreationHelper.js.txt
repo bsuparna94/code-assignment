@@ -1,0 +1,35 @@
+({
+    getAvailableProducts: function(component) {
+        var action = component.get("c.getAvailableProductsFromInventory");
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                component.set("v.availableProducts", response.getReturnValue());
+            } else {
+                console.error("Error retrieving available products: " + response.getError());
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    validateInputs: function(component) {
+        var soldQuantity = component.find("soldQuantityField").get("v.value");
+        var unitPrice = component.find("unitPriceField").get("v.value");
+        
+        if (!soldQuantity || soldQuantity <= 0) {
+            alert("Sold Quantity must be greater than 0");
+            return false;
+        }
+        
+        if (!unitPrice || unitPrice <= 0) {
+            alert("Unit Price must be greater than 0");
+            return false;
+        }
+        
+        return true;
+    },
+    
+    clearInputs: function(component) {
+        component.set("v.newOrderItem", { 'sobjectType': 'Order_Item__c', 'Sold_Quantity__c': 0, 'Unit_Price__c': 0, 'Product_SKU__c': '', 'Order__c': '' });
+    }
+})

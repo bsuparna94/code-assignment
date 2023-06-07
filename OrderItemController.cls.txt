@@ -1,0 +1,6 @@
+public class OrderItemController {
+    @AuraEnabled(cacheable=true)
+    public static List<Product__c> getAvailableProductsFromInventory() {
+        return [SELECT Id, Name, SKU__c FROM Product__c];
+    }
+}

@@ -1,0 +1,88 @@
+@IsTest
+public class OrderItemTest {
+    @IsTest
+    static void testOrderItemId() {
+        // Create test data
+        Order_Item__c orderItem = new Order_Item__c();
+        orderItem.Order_Item_Id__c = 123;
+        
+        // Insert the order item
+        insert orderItem;
+        
+        // Retrieve the inserted order item
+        Order_Item__c insertedOrderItem = [SELECT Order_Item_Id__c FROM Order_Item__c WHERE Id = :orderItem.Id];
+        
+        // Verify the order item ID
+        System.assertEquals(123, insertedOrderItem.Order_Item_Id__c);
+    }
+    
+    @IsTest
+    static void testSoldQuantity() {
+        // Create test data
+        Order_Item__c orderItem = new Order_Item__c();
+        orderItem.Sold_Quantity__c = 10;
+        
+        // Insert the order item
+        insert orderItem;
+        
+        // Retrieve the inserted order item
+        Order_Item__c insertedOrderItem = [SELECT Sold_Quantity__c FROM Order_Item__c WHERE Id = :orderItem.Id];
+        
+        // Verify the sold quantity
+        System.assertEquals(10, insertedOrderItem.Sold_Quantity__c);
+    }
+    
+    @IsTest
+    static void testUnitPrice() {
+        // Create test data
+        Order_Item__c orderItem = new Order_Item__c();
+        orderItem.Unit_Price__c = 19.99;
+        
+        // Insert the order item
+        insert orderItem;
+        
+        // Retrieve the inserted order item
+        Order_Item__c insertedOrderItem = [SELECT Unit_Price__c FROM Order_Item__c WHERE Id = :orderItem.Id];
+        
+        // Verify the unit price
+        System.assertEquals(19.99, insertedOrderItem.Unit_Price__c);
+    }
+    
+    @IsTest
+    static void testProductSku() {
+        // Create test data
+        Product__c product = new Product__c();
+        insert product;
+        
+        Order_Item__c orderItem = new Order_Item__c();
+        orderItem.Product_SKU__c = product.Id;
+        
+        // Insert the order item
+        insert orderItem;
+        
+        // Retrieve the inserted order item
+        Order_Item__c insertedOrderItem = [SELECT Product_SKU__c FROM Order_Item__c WHERE Id = :orderItem.Id];
+        
+        // Verify the product SKU
+        System.assertEquals(product.Id, insertedOrderItem.Product_SKU__c);
+    }
+    
+    @IsTest
+    static void testOrderId() {
+        // Create test data
+        Order__c order = new Order__c();
+        insert order;
+        
+        Order_Item__c orderItem = new Order_Item__c();
+        orderItem.Order_Id__c = order.Id;
+        
+        // Insert the order item
+        insert orderItem;
+        
+        // Retrieve the inserted order item
+        Order_Item__c insertedOrderItem = [SELECT Order_Id__c FROM Order_Item__c WHERE Id = :orderItem.Id];
+        
+        // Verify the order ID
+        System.assertEquals(order.Id, insertedOrderItem.Order_Id__c);
+    }
+}

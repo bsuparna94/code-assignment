@@ -1,0 +1,37 @@
+<aura:component controller="OrderItemController">
+    <aura:attribute name="orderItems" type="List" default="[]" />
+    <aura:attribute name="availableProducts" type="List" default="[]" />
+    <aura:attribute name="newOrderItem" type="Order_Item__c" default="{ 'sobjectType': 'Order_Item__c', 'Sold_Quantity__c': 0, 'Unit_Price__c': 0, 'Product_SKU__c': '', 'Order__c': '' }" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <div>
+        <lightning:select name="productSKU" label="Product SKU" aura:id="productSKUField" onchange="{!c.handleProductChange}">
+            <option value="">-- Select Product --</option>
+            <aura:iteration items="{!v.availableProducts}" var="product">
+                <option value="{!product.SKU__c}">{!product.Name}</option>
+            </aura:iteration>
+        </lightning:select>
+        <lightning:input type="number" label="Sold Quantity" value="{!v.newOrderItem.Sold_Quantity__c}" aura:id="soldQuantityField" />
+        <lightning:input type="number" label="Unit Price" value="{!v.newOrderItem.Unit_Price__c}" aura:id="unitPriceField" />
+        <lightning:button label="Add Order Item" onclick="{!c.addOrderItem}" />
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Product SKU</th>
+                <th>Sold Quantity</th>
+                <th>Unit Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.orderItems}" var="orderItem">
+                <tr>
+                    <td>{!orderItem.Product_SKU__c}</td>
+                    <td>{!orderItem.Sold_Quantity__c}</td>
+                    <td>{!orderItem.Unit_Price__c}</td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+</aura:component>

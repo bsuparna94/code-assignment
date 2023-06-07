@@ -1,0 +1,26 @@
+public with sharing class InventoryManagerController {
+    @AuraEnabled
+    public static List<Product__c> getProducts() {
+        return [SELECT SKU__c, Name, Quantity__c, Unit_Price__c FROM Product__c];
+    }
+
+    @AuraEnabled
+    public static Product__c getProductById(Id productId) {
+        return [SELECT SKU__c, Name, Quantity__c, Unit_Price__c FROM Product__c WHERE Id = :productId];
+    }
+
+    @AuraEnabled
+    public static void createProduct(Product__c product) {
+        insert product;
+    }
+
+    @AuraEnabled
+    public static void updateProduct(Product__c product) {
+        update product;
+    }
+
+    @AuraEnabled
+    public static void deleteProduct(Id productId) {
+        delete [SELECT Id FROM Product__c WHERE Id = :productId];
+    }
+}

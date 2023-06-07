@@ -1,0 +1,57 @@
+<aura:component controller="InventoryManagerController">
+    <aura:attribute name="products" type="List" />
+    <aura:attribute name="newProduct" type="Product__c" default="{'sobjectType':'Product__c','SKU__c':0,'Name':'','Quantity__c':0,'Unit_Price__c':0}" />
+    <aura:attribute name="editProduct" type="Product__c" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <!-- Display Products -->
+    <table>
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.products}" var="product">
+                <tr>
+                    <td>{!product.SKU__c}</td>
+                    <td>{!product.Name}</td>
+                    <td>{!product.Quantity__c}</td>
+                    <td>{!product.Unit_Price__c}</td>
+                    <td>
+                        <button data-id="{!product.Id}" onclick="{!c.editProduct}">Edit</button>
+                        <button data-id="{!product.Id}" onclick="{!c.deleteProduct}">Delete</button>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+
+    <!-- Add New Product -->
+    <div>
+        <h2>Add New Product</h2>
+        <input type="number" value="{!v.newProduct.SKU__c}" placeholder="SKU" />
+        <input type="text" value="{!v.newProduct.Name}" placeholder="Product Name" />
+        <input type="number" value="{!v.newProduct.Quantity__c}" placeholder="Quantity" />
+        <input type="number" value="{!v.newProduct.Unit_Price__c}" placeholder="Unit Price" />
+        <button onclick="{!c.addProduct}">Add Product</button>
+    </div>
+
+    <!-- Edit Existing Product -->
+    <aura:if isTrue="{!not(empty(v.editProduct))}">
+        <div>
+            <h2>Edit Product</h2>
+            <input type="number" value="{!v.editProduct.SKU__c}" placeholder="SKU" />
+            <input type="text" value="{!v.editProduct.Name}" placeholder="Product Name" />
+            <input type="number" value="{!v.editProduct.Quantity__c}" placeholder="Quantity" />
+            <input type="number" value="{!v.editProduct.Unit_Price__c}" placeholder="Unit Price" />
+            <button onclick="{!c.saveProduct}">Save Product</button>
+            <button onclick="{!c.cancelEdit}">Cancel</button>
+        </div>
+    </aura:if>
+</aura:component>

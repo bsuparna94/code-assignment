@@ -1,0 +1,21 @@
+({
+    init: function(component, event, helper) {
+        helper.getAvailableProducts(component);
+    },
+    
+    handleProductChange: function(component, event, helper) {
+        var selectedProductSKU = component.find("productSKUField").get("v.value");
+        component.set("v.newOrderItem.Product_SKU__c", selectedProductSKU);
+    },
+    
+    addOrderItem: function(component, event, helper) {
+        var isValid = helper.validateInputs(component);
+        
+        if (isValid) {
+            var newOrderItem = JSON.parse(JSON.stringify(component.get("v.newOrderItem")));
+            component.set("v.orderItems", [...component.get("v.orderItems"), newOrderItem]);
+            
+            helper.clearInputs(component);
+        }
+    }
+})

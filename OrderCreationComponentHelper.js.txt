@@ -1,0 +1,29 @@
+({
+    getProducts: function(component, callback) {
+        var action = component.get("c.getAvailableProducts");
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var products = response.getReturnValue();
+                callback(products);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    createOrder: function(component, selectedProduct, amount, callback) {
+        var action = component.get("c.createOrderRecord");
+        action.setParams({
+            "productId": selectedProduct,
+            "amount": amount
+        });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var isSuccess = response.getReturnValue();
+                callback(isSuccess);
+            }
+        });
+        $A.enqueueAction(action);
+    }
+})

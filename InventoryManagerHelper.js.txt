@@ -1,0 +1,73 @@
+({
+    loadProducts: function(component) {
+        var action = component.get("c.getProducts");
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                component.set("v.products", response.getReturnValue());
+            } else {
+                console.error("Failed to load products.");
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    createProduct: function(component, newProduct) {
+        var action = component.get("c.createProduct");
+        action.setParams({ product: newProduct });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                // Reload products after successful creation
+                this.loadProducts(component);
+            } else {
+                console.error("Failed to create product.");
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    getProduct: function(component, productId) {
+        var action = component.get("c.getProductById");
+        action.setParams({ productId: productId });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                component.set("v.editProduct", response.getReturnValue());
+            } else {
+                console.error("Failed to get product.");
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    updateProduct: function(component, editProduct) {
+        var action = component.get("c.updateProduct");
+        action.setParams({ product: editProduct });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                // Reload products after successful update
+                this.loadProducts(component);
+            } else {
+                console.error("Failed to update product.");
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    deleteProduct: function(component, productId) {
+        var action = component.get("c.deleteProduct");
+        action.setParams({ productId: productId });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                // Reload products after successful deletion
+                this.loadProducts(component);
+            } else {
+                console.error("Failed to delete product.");
+            }
+        });
+        $A.enqueueAction(action);
+    }
+})
